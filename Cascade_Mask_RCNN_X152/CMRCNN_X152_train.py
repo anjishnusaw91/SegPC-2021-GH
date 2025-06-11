@@ -54,16 +54,26 @@ from timm.models.vision_transformer import *
 import torch
 import torch.nn as nn
 
-
-
+from timm.models import vit_small_resnet26d_224, vit_base_resnet26d_224, vit_base_resnet50d_224
+# from timm.models.vision_transformer_hybrid import vit_small_resnet50d_s3_224
+from timm.models.vision_transformer import (
+    VisionTransformer,
+    vit_small_patch16_224,
+    vit_base_patch16_224,
+    vit_large_patch16_224,
+    vit_base_patch16_384,
+    vit_base_patch32_384,
+    vit_large_patch16_384,
+    vit_large_patch32_384
+)
 class Transformer_Encoder(VisionTransformer):
     def __init__(self, pretrained = False, pretrained_model = None, img_size=224, patch_size=16, in_chans=3, num_classes=1, embed_dim=768, depth=12,
                   num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
                   drop_path_rate=0., hybrid_backbone=None, norm_layer=nn.LayerNorm):
 
         super(Transformer_Encoder, self).__init__(img_size=img_size, patch_size=patch_size, in_chans=in_chans, num_classes=1000, embed_dim=embed_dim, depth=depth,
-                  num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
-                  drop_path_rate=drop_path_rate, hybrid_backbone=hybrid_backbone, norm_layer=norm_layer)
+                  num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
+                  drop_path_rate=drop_path_rate, norm_layer=norm_layer)
         
         self.num_classes = 1
         self.dispatcher = {
@@ -77,7 +87,7 @@ class Transformer_Encoder(VisionTransformer):
             'vit_large_patch16_224' : vit_large_patch16_224,
             'vit_large_patch32_384': vit_large_patch32_384,
             'vit_small_resnet26d_224': vit_small_resnet26d_224,
-            'vit_small_resnet50d_s3_224': vit_small_resnet50d_s3_224,
+            # 'vit_small_resnet50d_s3_224': vit_small_resnet50d_s3_224,
             'vit_base_resnet26d_224' : vit_base_resnet26d_224,
             'vit_base_resnet50d_224' : vit_base_resnet50d_224,
         }
@@ -317,11 +327,3 @@ os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
 trainer = CocoTrainer(cfg)
 trainer.resume_or_load(resume=False)
 trainer.train()
-
-
-
-  
-
-  
-
-
