@@ -47,25 +47,17 @@ val_meta = MetadataCatalog.get('SegPC_val')
 train_dicts = DatasetCatalog.get("SegPC_train")
 val_dicts = DatasetCatalog.get("SegPC_val")
 
-
 import timm
+# from timm.models.vision_transformer import vit_small_resnet26d_224
+model1 = timm.create_model('vit_small_resnet26d_224', pretrained=False)
+# model2 = timm.create_model('vit_small_resnet50d_s3_224', pretrained=False)
 from timm.models.vision_transformer import VisionTransformer
 from timm.models.vision_transformer import *
 import torch
 import torch.nn as nn
 
-from timm.models import vit_small_resnet26d_224, vit_base_resnet26d_224, vit_base_resnet50d_224
-# from timm.models.vision_transformer_hybrid import vit_small_resnet50d_s3_224
-from timm.models.vision_transformer import (
-    VisionTransformer,
-    vit_small_patch16_224,
-    vit_base_patch16_224,
-    vit_large_patch16_224,
-    vit_base_patch16_384,
-    vit_base_patch32_384,
-    vit_large_patch16_384,
-    vit_large_patch32_384
-)
+
+
 class Transformer_Encoder(VisionTransformer):
     def __init__(self, pretrained = False, pretrained_model = None, img_size=224, patch_size=16, in_chans=3, num_classes=1, embed_dim=768, depth=12,
                   num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
@@ -86,10 +78,10 @@ class Transformer_Encoder(VisionTransformer):
             'vit_large_patch32_384': vit_large_patch32_384,
             'vit_large_patch16_224' : vit_large_patch16_224,
             'vit_large_patch32_384': vit_large_patch32_384,
-            'vit_small_resnet26d_224': vit_small_resnet26d_224,
-            # 'vit_small_resnet50d_s3_224': vit_small_resnet50d_s3_224,
-            'vit_base_resnet26d_224' : vit_base_resnet26d_224,
-            'vit_base_resnet50d_224' : vit_base_resnet50d_224,
+            'vit_small_resnet26d_224': model1
+            # 'vit_small_resnet50d_s3_224': model2,
+            # 'vit_base_resnet26d_224' : vit_base_resnet26d_224,
+            # 'vit_base_resnet50d_224' : vit_base_resnet50d_224,
         }
         self.pretrained_model = pretrained_model
         self.pretrained = pretrained
@@ -258,7 +250,7 @@ class Transformer_Effb5(Backbone):
             twk = self.Wk(t)
             twk_T = rearrange(twk, 'b l c -> b c l')
             A = torch.einsum('bij,bjk->bik', xwq, twk_T).softmax(dim = -1)
-            x += torch.einsum('bij,bjk->bik', A, t)
+            x = x + torch.einsum('bij,bjk->bik', A, t)
             features.append(x)
 
         return features
