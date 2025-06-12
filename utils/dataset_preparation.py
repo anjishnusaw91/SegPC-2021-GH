@@ -151,5 +151,5 @@ with open(args.dest_root+'COCO.json', 'w') as fp:
     json.dump(dataset, fp)
 
 print("number of images saved: ", os.listdir(dest_root+'x'))
-print("number of instances saved: ", os.listdir(dest_root+'instances_y'))
+print("number of instances saved: ", os.listdir(dest_root+'instance_y'))
 
