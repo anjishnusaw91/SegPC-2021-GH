@@ -296,7 +296,7 @@ if 'Original' not in args.backbone:
   cfg.MODEL.BACKBONE.NAME = args.backbone
   
 cfg.CUDNN_BENCHMARK = True
-cfg.OUTPUT_DIR = args.work_dir
+# cfg.OUTPUT_DIR = args.work_dir
 
 
 
